@@ -11,9 +11,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-
-# TODO: REMOVE ME
-# Load our .env file and load the ENV variables.
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -42,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # TODO: REMOVE ME
     'django_extensions',
     'social_django',
     'core',
@@ -57,13 +53,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # TODO: REMOVE ME
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.spotify.SpotifyOAuth2',
-    # TODO: REMOVE ME
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -80,7 +74,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # TODO: FINDME
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],
@@ -140,8 +133,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# TODO: FINDME
-# Spotify API
 
 SOCIAL_AUTH_SPOTIFY_KEY = os.getenv('SPOTIFY_CLIENT_ID')
 SOCIAL_AUTH_SPOTIFY_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
@@ -153,7 +144,5 @@ SOCIAL_AUTH_SPOTIFY_SCOPE = [
     'user-read-recently-played',
 ]
 
-# TODO: FINDME
-# Auth settings
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
