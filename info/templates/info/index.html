@@ -1,7 +1,9 @@
-<h2>Spotify Example</h2>
+<h2>Dope Tracks</h2>
 {% if request.user.is_authenticated %}
 <div>
-  <a href="{% url 'test' %}">Get Stats!</a>
+  <a href="{% url 'top_tracks' %}">Get Top Tracks!</a>
+  <a href="{% url 'top_artists' %}">Get Top Artists!</a>
+  
 </div>
 {% endif %}
 <div>

@@ -142,6 +142,8 @@ SOCIAL_AUTH_SPOTIFY_SCOPE = [
     'user-top-read',
     'user-library-read',
     'user-read-recently-played',
+    'user-read-currently-playing',
+    
 ]
 
 LOGIN_REDIRECT_URL = 'index'
