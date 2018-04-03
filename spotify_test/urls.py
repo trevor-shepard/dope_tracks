@@ -11,4 +11,5 @@ urlpatterns = [
     path('logout', LogoutView.as_view(), name='logout'),
     path('top_tracks', top_tracks, name='top_tracks'),
     path('top_artists', top_artists, name='top_artists'),
+    path('accounts/', include('accounts.urls')),
 ]

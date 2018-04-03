@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from core.decorators import spotify_view
 
+#TODO view for user-read-currently-playing
 
 # Stupid simple view to render login.
 def index(request):
@@ -22,6 +23,8 @@ def top_tracks(request, token):
     }
   )
   resp.raise_for_status()
+
+  
 
   return JsonResponse({
     'data': resp.json()

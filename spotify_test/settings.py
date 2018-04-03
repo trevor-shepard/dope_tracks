@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'accounts',
     'social_django',
     'core',
     'info',
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'spotify_test.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -143,7 +144,6 @@ SOCIAL_AUTH_SPOTIFY_SCOPE = [
     'user-library-read',
     'user-read-recently-played',
     'user-read-currently-playing',
-    
 ]
 
 LOGIN_REDIRECT_URL = 'index'
