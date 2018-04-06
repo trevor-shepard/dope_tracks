@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from accounts.models import User
 
 #TODO add image fields to all models
 #TODO find out what scope (token) needed to access artist info form href
@@ -7,24 +7,24 @@ from django.contrib.auth.models import User
 class Group(models.Model):
     name = models.CharField(max_length=200)
     users = models.ManyToManyField(
-        User,
-        related_name='groups',
-        related_query_name='groups')
+        User)
+    summary = models.CharField(max_length=800, blank=True, null=True)
+    
 
-class Genre(models.Model):
+class Tag(models.Model):
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=400, blank=True, null=True)
     wiki_url = models.CharField(max_length=100, blank=True, null=True)
 
 class Artist(models.Model):
     name = models.CharField(max_length=40)
-    genre = models.ManyToManyField(
-        Genre,
-        related_name='genres',
-        related_query_name='genres')
+    gag = models.ManyToManyField(
+        Tag,
+        related_name='tags',
+        related_query_name='tags')
     popularity = models.IntegerField(blank=True, null=True)
     followers = models.IntegerField(blank=True, null=True)
-    spotify_id = models.CharField(
+    mbid = models.CharField(
         max_length=30,
         primary_key=True,
         editable=False)   
@@ -32,8 +32,8 @@ class Artist(models.Model):
 class Album(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)    
     external_url = models.CharField(max_length=70, blank=True, null=True)
-    uri = models.CharField(max_length=50)
-    spotify_id = models.CharField(
+    url = models.CharField(max_length=50)
+    mbid = models.CharField(
         max_length=30,
         primary_key=True,
         editable=False)    
@@ -42,9 +42,9 @@ class Track(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)
     external_url = models.CharField(max_length=70, blank=True, null=True)
     popularity = models.IntegerField(blank=True, null=True)
-    uri = models.CharField(max_length=50)
+    url = models.CharField(max_length=50)
     artist = models.ManyToManyField(Artist)
-    spotify_id = models.CharField(
+    mbid = models.CharField(
         max_length=30,
         primary_key=True,
         editable=False)    
@@ -58,36 +58,11 @@ class UserTrackHistory(models.Model):
         related_query_name='track_history',
         on_delete=models.CASCADE
         )
-
-    TIME_RANGE = (
-        ('S', 'Short'),
-        ('M', 'Medium'),
-        ('L', 'Long'),
-        )
-    time_range = models.CharField(max_length=1, choices=TIME_RANGE)
-    date = models.DateTimeField(auto_now_add=True)
-    tracks = models.ManyToManyField(
-        Track
-        related_name='track_history',
-        related_query_name='track_history'
-        )
-    
-class UserArtistHistory(models.Model):
-    user = models.ForeignKey(
-        User,
-        related_name='artist_history',
-        related_query_name='artist_history',
+    track = models.ForeignKey(
+        Track,
+        related_name='user_track_history',
+        related_query_name='user_track_history',
         on_delete=models.CASCADE
-        )
-    TIME_RANGE = (
-        ('S', 'Short'),
-        ('M', 'Medium'),
-        ('L', 'Long'),
-        )
-    time_range = models.CharField(max_length=1, choices=TIME_RANGE)
-    date = models.DateTimeField(auto_now_add=True)
-    artists = models.ManyToManyField(
-        Artist,
-        related_name='artist_history',
-        related_query_name='artist_history'
-        )
+    )
+    played_on = models.DateTimeField(auto_now_add=True)
+    

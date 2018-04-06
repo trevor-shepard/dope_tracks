@@ -58,7 +58,7 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.spotify.SpotifyOAuth2',
+    'social_core.backends.lastfm.LastFmAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -135,16 +135,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-SOCIAL_AUTH_SPOTIFY_KEY = os.getenv('SPOTIFY_CLIENT_ID')
-SOCIAL_AUTH_SPOTIFY_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
-
-# Used for our examples API call.
-SOCIAL_AUTH_SPOTIFY_SCOPE = [
-    'user-top-read',
-    'user-library-read',
-    'user-read-recently-played',
-    'user-read-currently-playing',
-]
+SOCIAL_AUTH_LASTFM_KEY = os.getenv('LASTFM_CLIENT_ID')
+SOCIAL_AUTH_LASTFM_SECRET = os.getenv('LASTFM_CLIENT_SECRET')
 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
+
+AUTH_USER_MODEL = 'accounts.User'

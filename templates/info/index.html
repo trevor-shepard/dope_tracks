@@ -1,15 +1,17 @@
 <h2>Dope Tracks</h2>
 {% if request.user.is_authenticated %}
 <div>
-  <a href="{% url 'top_tracks' %}">Get Top Tracks!</a>
-  <a href="{% url 'top_artists' %}">Get Top Artists!</a>
+  <!-- Links -->
+  <a href="{% url 'test' %}">Test</a>
+  <a href="{% url 'user_all_tracks' %}">User All Tracks</a>
   
+    
 </div>
 {% endif %}
 <div>
   {% if request.user.is_authenticated %}
   <a href="{% url 'logout' %}">Logout</a>
   {% else %}
-  <a href="{% url 'social:begin' 'spotify' %}">Login with Spotify</a>
+  <a href="{% url 'social:begin' 'lastfm' %}">Login with Spotify</a>
   {% endif %}
 </div>

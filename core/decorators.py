@@ -4,14 +4,28 @@ from django.shortcuts import redirect
 from requests.exceptions import HTTPError
 from social_django.utils import load_strategy
 
+from django.conf import settings
 
-def spotify_view(function):
+
+def lastfm_view(function):
   @login_required
   def wrap(request, *args, **kwargs):
-    social = request.user.social_auth.get(provider='spotify')
-    token = social.get_access_token(load_strategy())
+    social = request.user.social_auth.get(provider='lastfm')
+    session_key = social.extra_data.get('session_key')
+    api_key = settings.SOCIAL_AUTH_LASTFM_KEY
+    api_secret = settings.SOCIAL_AUTH_LASTFM_SECRET
+  
+    signature = hashlib.md5(''.join(
+      ('api_key', api_key, 'methodauth.getSession', secret)
+    ).encode()).hexdigest()
+
+    credentials = {
+      'session_key': session_key,
+      'api_key': api_key,
+      'signature': signature
+    }
     try:
-      return function(request, token, *args, **kwargs)
+      return function(request, credentials, *args, **kwargs)
     except HTTPError as e:
       print(f'Failed using token because of HTTPError: "{e}"')
       return redirect('logout')
