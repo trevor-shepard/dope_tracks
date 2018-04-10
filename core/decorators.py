@@ -3,9 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from requests.exceptions import HTTPError
 from social_django.utils import load_strategy
+import base64
 
 from django.conf import settings
-
+import requests
 
 def lastfm_view(function):
   @login_required
@@ -34,3 +35,9 @@ def lastfm_view(function):
   wrap.__doc__ = function.__doc__
   wrap.__name__ = function.__name__
   return wrap
+
+
+
+
+
+
