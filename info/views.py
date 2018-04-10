@@ -18,7 +18,7 @@ def index(request):
   return render(request, 'info/index.html')
 #TODO filter search by primary key of last pulled class
 
-def test(request):
+def test(request, q):
   x = spotify_api_search(q="enya", type='artist')
   return JsonResponse(x)
 

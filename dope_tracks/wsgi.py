@@ -1,5 +1,5 @@
 """
-WSGI config for spotify_test project.
+WSGI config for dope_tracks project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "spotify_test.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dope_tracks.settings")
 
 application = get_wsgi_application()

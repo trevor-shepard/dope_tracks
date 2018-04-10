@@ -11,17 +11,19 @@ from django.utils import timezone
 
 #Should groups take all types of listening history, and weight it diffrently, or just take one type from users
 
-
 class Group(models.Model):
     name = models.CharField(max_length=200)
     users = models.ManyToManyField(
         User)
     summary = models.CharField(max_length=800, blank=True, null=True)
+    image = models.ImageField(upload_to='images/group')
 
 class Tag(models.Model):
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=400, blank=True, null=True)
     wiki_url = models.CharField(max_length=100, blank=True, null=True)
+    image = models.ImageField(upload_to='images/tag')
+    
 
 class Artist(models.Model):
     name = models.CharField(max_length=40)
@@ -35,6 +37,7 @@ class Artist(models.Model):
     mbid = models.CharField(
         max_length=30,
         )
+    image = models.ImageField(upload_to='images/artist')    
     def __str__(self):
         return f'{self.name}'
 
@@ -42,6 +45,7 @@ class Album(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)    
     external_url = models.CharField(max_length=70, blank=True, null=True)
     url = models.CharField(max_length=50, blank=True, null=True)
+    image = models.ImageField(upload_to='images/album')    
     mbid = models.CharField(
         max_length=30,
         )    
@@ -51,6 +55,7 @@ class Track(models.Model):
     external_url = models.CharField(max_length=70, blank=True, null=True)
     popularity = models.IntegerField(blank=True, null=True)
     url = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='images/track')    
     artist = models.ForeignKey(
         Artist,
         related_name='track',
@@ -63,9 +68,6 @@ class Track(models.Model):
     def __str__(self):
         return f'{self.name}'
   
-    
-#TODO pull listening history after last time pulled
-#TODO
 class UserTrackHistory(models.Model):
     user = models.ForeignKey(
         User,
