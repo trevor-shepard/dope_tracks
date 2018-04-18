@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block content %}
+<div class='detail_content'>
+    <h2>{{group.name}}</h2>
+    <h3>{{group.summary}}</h3>
+   {% for member in members %}
+    <tr>
+       <td>
+            {{member.username}}
+       </td>
+   </tr>
+   {% endfor %}
+   <div id="top-tracks" data-id="{{group.id}}">
+       <input type="text" id="#days" v-model="days" v-on:keypress="checkSubmit">
+       <div v-for="track in tracks">
+            <h1>
+                [[track.name]] [[track.artist.name]]
+            </h1>
+            <ul>
+                <li v-for="user in track.users">
+                    [[ user.username ]]
+                </li>
+            </ul>
+       </div>
+   </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/group_top_tracks.js' %}"></script>
+{% endblock scripts %}

@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<h1>Create a Group</h1>
+
+<div id='app'>
+    
+</div>
+{% endif %}
+
+{% endblock content %}
