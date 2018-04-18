@@ -11,7 +11,7 @@
        </td>
    </tr>
    {% endfor %}
-   <div id="top-tracks" data-id="{{group.id}}">
+   <div v-cloak id="top-tracks" data-id="{{group.id}}">
        <input type="text" id="#days" v-model="days" v-on:keypress="checkSubmit">
        <div v-for="track in tracks">
             <h1>

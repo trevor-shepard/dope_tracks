@@ -11,14 +11,15 @@ new Vue({
             var self = this
             $.get('/group/'+ id +'/common_tracks?days=' + self.days)
             .done(function(tracks){
-                tracks.forEach(function(track, i) {
-                    $.get('/track/get_recent_users/' + track.id)
-                    .done(function(users) {
-                        self.tracks[i].users = users
-                        self.tracks = tracks
-                    })
+                var calls = tracks.map(function(track) {
+                    return $.get('/track/get_recent_users/' + track.id)
                 })
-                console.log(self.tracks)
+                $.when.apply(this, calls).done(function() {
+                    for(var i = 0; i < arguments.length; i++) {
+                        tracks[i].users = arguments[i][0]
+                    }
+                    self.tracks = tracks
+                })
             })
         },
         checkSubmit: function(event){
