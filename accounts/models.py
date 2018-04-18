@@ -5,4 +5,5 @@ from django.utils import timezone
 
 class User(AbstractUser):
     last_track_pull = models.DateTimeField(default=timezone.now)
+    friends = models.ManyToManyField('accounts.User', blank=True)
     
