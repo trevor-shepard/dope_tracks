@@ -1,23 +1,15 @@
-<h2>Dope Tracks</h2>
-{% if request.user.is_authenticated %}
+{% extends "layout.html" %}
+
+
+{% block content %}
 <div>
-  <!-- Links -->
-  <a href="{% url 'user_recent_track_history' %}">user_recent_track_history</a>
-  <a href="{% url 'user_all_tracks' %}">User All Tracks</a>
-  <a href="{% url 'user_all_track_history' %}">User All Track History</a>
-  <a href="{% url 'test' %}">test</a>
-  <a href="{% url 'update_group_history' %}">update_group_history</a>
-     
-  
-  
-  
-    
-</div>
-{% endif %}
-<div>
-  {% if request.user.is_authenticated %}
-  <a href="{% url 'logout' %}">Logout</a>
-  {% else %}
-  <a href="{% url 'social:begin' 'lastfm' %}">Login with LASTFM</a>
-  {% endif %}
-</div>
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'social:begin' 'lastfm' %}">Login with LASTFM</a>
+    {% endif %}
+  </div>
+{% endblock content %}
+
+
+

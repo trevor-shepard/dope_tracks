@@ -6,10 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dope Tracks | {% block title %}{% endblock %}</title>
+    <link href="//cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex flex-row-reverse">
+        <a class="navbar-brand" href="#">DopeTracks</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Your Data <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Your Groups</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Top Charts</a>
+                </li>
+            </ul>
+        </div>
+    </nav>    
     <div id="page">
         <div id="content">
             {% block content %}{% endblock %}
@@ -18,6 +38,8 @@
     <!-- SCRIPTS -->
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/jquery"></script>
+    <script src="//cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/moment.js/2.17.1/moment.min.js"></script>
     
     {% block scripts %}
     

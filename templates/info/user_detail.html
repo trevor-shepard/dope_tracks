@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block content %}
+<div class="detail_content">
+    <div id="username" class="header">
+        <h2>{{user.username}}</h2>
+    </div>
+    <div v-cloak id="top-tracks" data-id="{{user.username}}">
+        <input type="text" id="#days" v-model="days" v-on:keypress="checkSubmit">
+        <div v-for="track in tracks">
+            <div class="data-instance">
+                <h3>
+                    [[track.track.name]] by [[track.track.artist.name]] 
+                </h3>
+            </div>
+            <div class="data-info">
+                <p>
+                    Played: [[track.playcount]]
+                </p>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/user_top_tracks.js' %}"></script>
+{% endblock scripts %}

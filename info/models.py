@@ -13,6 +13,8 @@ class Tag(models.Model):
     description = models.CharField(max_length=400, blank=True, null=True)
     wiki_url = models.CharField(max_length=300, blank=True, null=True)
     image = models.ImageField(upload_to='images/tag')
+    def __str__(self):
+        return f'{self.name}'                
 
 class Group(models.Model):
     name = models.CharField(max_length=200)
