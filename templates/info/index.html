@@ -1,15 +1,64 @@
-{% extends "layout.html" %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="">
+  
+  <title>DopeTracks</title>
+  
+  <!-- Bootstrap core CSS -->
+  <link href="//cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
 
+<body class="text-center">
+  
+  <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
 
-{% block content %}
-<div>
-    {% if request.user.is_authenticated %}
-    <a href="{% url 'logout' %}">Logout</a>
-    {% else %}
-    <a href="{% url 'social:begin' 'lastfm' %}">Login with LASTFM</a>
-    {% endif %}
+      <header class="masthead mb-auto">
+        {% if request.user.is_authenticated %}
+          <div class="inner">
+            <h3 class="masthead-brand">DT</h3>
+            
+            <nav class="nav nav-masthead justify-content-right">
+                <a href="#" class="nav-link">See Your Groups</a>
+                <a href="#" class="nav-link">Browse Available Groups</a>
+                <a href="#" class="nav-link">Make A Group</a>
+                <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+            </nav>
+          </div>
+          {% endif %}
+        </header>
+    
+    <main role="main" class="inner cover">
+      <h1 class="cover-heading">Welcome To DopeTracks</h1>
+      <p class="lead">Explore Data That Belongs To You</p>
+      <p class="lead">
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'user_detail' username=request.user.username %}" class="btn btn-lg btn-secondary">See Your Stats</a>
+        
+        {% else %}         
+        <a href="{% url 'social:begin' 'lastfm' %}" class="btn btn-lg btn-secondary">Log In With Last FM</a>
+        {% endif %}
+      </p>
+    </main>
+    
+    <footer class="mastfoot mt-auto">
+      <div class="inner">
+        <a href="https://www.youtube.com/watch?v=ulCdoCfw-bY">NeverMind</a>
+      </div>
+    </footer>
   </div>
-{% endblock content %}
-
-
-
+  
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/popper.min.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

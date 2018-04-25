@@ -28,7 +28,7 @@ a:hover {
 html,
 body {
   height: 100%;
-  background-color: #79BD8F;
+  background: linear-gradient(to bottom, #ffa84c 0%,#ff7b0d 100%);
 }
 body {
   color: #10222B;
@@ -137,6 +137,9 @@ body {
 /* INDEX.HTML END */
 
 
-#navbarNav {
-    background: #79BD8F:
+.navbar {
+    background: linear-gradient(to top, #ffa84c 0%,#ff7b0d 100%);
 }
+
+
+
