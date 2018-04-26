@@ -3,24 +3,29 @@
 {% block content %}
 <div class="detail_content">
     <div id="username" class="header">
-        <h2>{{user.username}}</h2>
-    </div>
-    <div v-cloak id="top-tracks" data-id="{{user.username}}">
-        <input type="text" id="#days" v-model="days" v-on:keypress="checkSubmit">
-        <div v-for="track in tracks">
-            <div class="data-instance">
-                <h3>
-                    [[track.track.name]] by [[track.track.artist.name]] 
-                </h3>
+        <h1>{{user.username}}</h2>
+        </div>
+        <div v-cloak id="top-tracks" data-id="{{user.username}}">
+            <div class="time-banner">
+                <span>
+                    Top Tracks for Last 
+                </span>
+                <input type="text" id="#days" v-model="days" v-on:keypress="checkSubmit" class="time-input">
+                <span>Days</span>
             </div>
-            <div class="data-info">
-                <p>
-                    Played: [[track.playcount]]
-                </p>
+            <div class="data">
+                <div v-for="track in tracks">
+                    <div class="data-instance">
+                        <p>
+                            [[track.track.name]] by [[track.track.artist.name]] Played: [[track.playcount]]
+                        </p>
+                    </div>
+        
+                </div>
             </div>
         </div>
+        
     </div>
-    
 </div>
 {% endblock content %}
 

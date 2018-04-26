@@ -42,7 +42,8 @@ def test(request):
 #GROUP DISPLAY VIEWS
 def group_detail(request, pk):
   group = get_object_or_404(Group, pk=pk)
-  return render(request, 'info/group_detail.html', {'group':group})
+  members = group.users.all()
+  return render(request, 'info/group_detail.html', {'group':group, 'members': members})
 
 @api_view(['GET'])
 def group_get_common_tracks(request, pk):
@@ -139,10 +140,18 @@ def track_info(request):
 @api_view(['GET'])
 def track_get_recent_users(request, pk):
   days = int(request.GET.get('days', 30))
+  group_pk = request.GET.get('group')
+  
   track = get_object_or_404(Track, pk=pk)
   histories = UserTrackHistory.objects.filter(track=track, played_on__gte= timezone.now() - timedelta(days=days))
+  
   users = histories.values_list('user', flat=True).distinct()
   users = [User.objects.get(pk=id) for id in users]
+  
+  if group_pk:
+    group = get_object_or_404(Group, pk=group_pk)
+    users = [user for user in users if group in user.squads.all()]
+  
   users = UserSerializer(users, many=True)
   return Response(users.data)
 
@@ -174,6 +183,7 @@ def check_lastfm_user(request, user):
 
 def user_detail(request, username):
   user = get_object_or_404(User, username=username)
+  user_recent_track_history(user)
   return render(request, 'info/user_detail.html', {'user':user})
 
 @api_view(['GET'])
@@ -201,14 +211,18 @@ def user_tags(request, username):
 @api_view(['GET'])
 def user_artist_when_played(request, username, artist):
   user = get_object_or_404(User, username=username)
-
   artist = get_object_or_404(Artist, name=artist)
-
   histories = UserTrackHistory.objects.filter(user=user, track__artist=artist) #add time params here
   tracks = UserTrackHistorySerializer(histories, many=True)
   return Response(tracks.data)
 
-
+@api_view(['GET'])
+def display_user_groups(requests, username):
+  user = get_object_or_404(User, username=username)
+  groups = user.squads.all()
+  groups = GroupSerializer(groups, many=True)
+  return Response(groups.data)
+  
 
 
 

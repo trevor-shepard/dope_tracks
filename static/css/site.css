@@ -28,13 +28,16 @@ a:hover {
 html,
 body {
   height: 100%;
-  background: linear-gradient(to bottom, #ffa84c 0%,#ff7b0d 100%);
-}
-body {
-  color: #10222B;
+  color: #F5F2DC;
+  background-color: #454445;
   text-align: center;
   text-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
+
+.navbar {
+    background-color: 009494;
+}
+
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
@@ -137,9 +140,43 @@ body {
 /* INDEX.HTML END */
 
 
-.navbar {
-    background: linear-gradient(to top, #ffa84c 0%,#ff7b0d 100%);
+
+
+.time-input {
+    width: 40px;
+    background: transparent;
+    border: none;
+    padding-bottom: 50px;
+    outline: none;
+    font-size: 20px;
+    color: #F5F2DC;
+    
 }
 
+.time-input:active {
+    outline: none
+}
 
+.data {
+    display: grid;
+    grid-template-columns: 1fr;
 
+}
+
+.data-output {
+    max-height: 430px;
+    overflow: scroll;
+    
+}
+
+.artist-name {
+    font-weight: bold;
+}
+
+.track-name {
+    font-weight: bold;
+}
+
+.user-list {
+    color: #dddddd
+}

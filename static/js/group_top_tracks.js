@@ -12,7 +12,7 @@ new Vue({
             $.get('/group/'+ id +'/common_tracks?days=' + self.days)
             .done(function(tracks){
                 var calls = tracks.map(function(track) {
-                    return $.get('/track/get_recent_users/' + track.id)
+                    return $.get('/track/get_recent_users/' + track.id + '?group=' + id)
                 })
                 $.when.apply(this, calls).done(function() {
                     for(var i = 0; i < arguments.length; i++) {

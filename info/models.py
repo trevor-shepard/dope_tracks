@@ -26,11 +26,12 @@ class Group(models.Model):
     )
     users = models.ManyToManyField(
         User,
-        related_name='users'
+        related_name='squads'
         )
     tags = models.ManyToManyField(
         Tag, 
-        related_name='group_tags', 
+        related_name='group_tags',
+        blank=True 
         )
     summary = models.CharField(max_length=800, blank=True, null=True)
     image = models.ImageField(upload_to='images/group')
