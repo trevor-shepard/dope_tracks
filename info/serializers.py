@@ -2,11 +2,6 @@ from rest_framework import serializers
 from .models import Group, Track, Artist, Tag, UserTrackHistory
 from accounts.models import User
 
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = '__all__'
-
 class ArtistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artist
@@ -22,6 +17,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'last_track_pull']
+
+class GroupSerializer(serializers.ModelSerializer):
+    users = UserSerializer(many=True)
+    class Meta:
+        model = Group
+        fields = '__all__'
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:

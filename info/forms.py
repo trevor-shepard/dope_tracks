@@ -6,4 +6,4 @@ from django import forms
 class GroupForm(ModelForm):
     class Meta:
         model = Group
-        fields = '__all__'
+        exclude = ['owner']

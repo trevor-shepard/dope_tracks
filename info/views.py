@@ -31,9 +31,36 @@ def index(request):
   return render(request, 'info/index.html')
 #TODO filter search by primary key of last pulled class
 
+
 @api_view(['GET'])
-def test(request):
-  pass
+def get_global_top_plays(request):
+  days = int(request.GET.get('days', 30))
+  start = timezone.now() - timedelta(days=days)  
+  history = UserTrackHistory.objects.filter(played_on__gte=start)
+  history = history.values_list('track', flat=True)
+  counts = Counter(history)
+  top_tracks = counts.most_common(10)
+  top_tracks = [Track.objects.get(id=track_id) for track_id, play_count in top_tracks] 
+  tracks = TrackSerializer(top_tracks, many=True)
+  return Response(tracks.data)
+  
+
+def get_global_most_common_tracks(request):
+  days = int(request.GET.get('days', 30))
+  start = timezone.now() - timedelta(days=days)  
+  group = Users.objects.all()
+  start = timezone.now() - timedelta(days=days)
+  users = [Q(user=user) for user in group]
+  for user in group.users.all():
+    user_recent_track_history(user)
+  history = UserTrackHistory.objects.filter(reduce(operator.or_, users), played_on__gte =start).order_by('-played_on')
+  history = set(history.values_list('track', 'user'))
+  counts = Counter(map(lambda x: x[0], history))
+  top_tracks = counts.most_common(10)
+  top_tracks = [Track.objects.get(id=track_id) for track_id, play_count in top_tracks]
+  
+  tracks = TrackSerializer(top_tracks, many=True)
+  return Response(tracks.data)
 
 
 
@@ -44,6 +71,7 @@ def group_detail(request, pk):
   group = get_object_or_404(Group, pk=pk)
   members = group.users.all()
   return render(request, 'info/group_detail.html', {'group':group, 'members': members})
+
 
 @api_view(['GET'])
 def group_get_common_tracks(request, pk):
@@ -62,8 +90,20 @@ def group_get_common_tracks(request, pk):
   tracks = TrackSerializer(top_tracks, many=True)
   return Response(tracks.data)
 
+def group_create(request):
+  if request.method == "POST":
+    form = GroupForm(request.POST)
+    if form.is_valid():
+      group= form.save(commit=False)
+      group.owner = request.user
+      group.save()
+      group.users.set(form.cleaned_data['users'])
+      group.tags.set(form.cleaned_data['tags'])
+      return redirect('group_detail', pk=group.pk)
 
-
+  else:
+    form = GroupForm()
+  return render(request, 'info/group_create.html', {'form': form})
   
 
 
@@ -129,6 +169,7 @@ def pull_tracks_and_artists(user, tracks):
 
 
 
+
 #TRACK VIEWS
 def track_info(request):
   #needs mbid or artist name AND track name
@@ -154,6 +195,8 @@ def track_get_recent_users(request, pk):
   
   users = UserSerializer(users, many=True)
   return Response(users.data)
+
+
 
 
 
@@ -198,15 +241,7 @@ def display_user_top_tracks(request, username):
   top_20 = [(Track.objects.get(id=track_id), playcount) for track_id, playcount in top_20]
   top_20 = [{'track':TrackSerializer(track).data, 'playcount': playcount} for track, playcount in top_20]
   return Response(top_20)
-
-@api_view(['GET'])
-def user_tags(request, username):
-  days = int(request.GET.get('days', 30))
-  start = timezone.now() - timedelta(days=days)  
-  user = get_object_or_404(User, username=username)
-  history = UserTrackHistory.objects.filter(user=user, played_on__gte =start).order_by('-played_on')
-  artist_tags = [listen.track.artist.tag.all() for listen in history]
-  tags = [tag]  
+ 
 
 @api_view(['GET'])
 def user_artist_when_played(request, username, artist):
@@ -217,12 +252,28 @@ def user_artist_when_played(request, username, artist):
   return Response(tracks.data)
 
 @api_view(['GET'])
-def display_user_groups(requests, username):
+def get_user_group_list(request, username):
   user = get_object_or_404(User, username=username)
   groups = user.squads.all()
   groups = GroupSerializer(groups, many=True)
   return Response(groups.data)
-  
+
+def user_group_list(request, username):
+  return render(request, 'info/group_list.html')
+
+#TODO compares user listening histories between users and returns commonalities integergr
+def find_similar_user(request, username):
+  days = int(request.GET.get('days', 30))
+  start = timezone.now() - timedelta(days=days)
+  user = get_object_or_404(User, username=username)
+  users = User.objects.all().exclude(username=username).exclude(username = 'admin')
+  user_history = UserTrackHistory.objects.filter(user=user, played_on__gte=start)
+  users_history = [UserTrackHistory.objects.filter(user=user, played_on__gte=start) for user in users]
+  import pdb; pdb.set_trace()
+
+
+
+
 
 
 
@@ -244,4 +295,17 @@ def tag_info(request):
   response = requests.get(build_lastfm_api_call(tag=request.tag, method='tag.getInfo'))
   response.raise_for_status()
   return JsonResponse(response.json())
+
+#TODO
+@api_view(['GET'])  
+def get_user_top_tags(request, username):
+  days = int(request.GET.get('days', 30))
+  start = timezone.now() - timedelta(days=days)
+  user = get_object_or_404(User, username=username)
+  history = UserTrackHistory.objects.filter(user=user, played_on__gte=start)
+  tags = [listen.track.artist.tag.all() for listen in history]
+  tags = [tag for tag in tags]
+  import pdb; pdb.set_trace()
+
+
 

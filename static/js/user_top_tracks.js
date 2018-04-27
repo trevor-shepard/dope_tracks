@@ -6,9 +6,6 @@ new Vue({
         days: 30,
     },
     methods: {
-
-    },
-    methods: {
         getTopTracks: function(){
             var id = $('#top-tracks').attr('data-id')
             var self = this

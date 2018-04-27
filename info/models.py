@@ -34,7 +34,10 @@ class Group(models.Model):
         blank=True 
         )
     summary = models.CharField(max_length=800, blank=True, null=True)
-    image = models.ImageField(upload_to='images/group')
+    image = models.ImageField(
+        upload_to='images/group',
+        blank=True,
+        null=True)
     public = models.BooleanField(default=False)
     def __str__(self):
         return f'{self.name}'
