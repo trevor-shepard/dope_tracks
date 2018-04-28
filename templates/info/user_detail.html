@@ -1,34 +1,64 @@
 {% extends "layout.html" %}
 {% load static %}
 {% block content %}
-<div class="detail_content">
-    <div id="username" class="header">
-        <h1>{{user.username}}</h2>
+<div id="username" class="header">
+    <h1>{{user.username}}</h1>
+</div>
+<div class="detail-content">
+    <div v-cloak id="top-tracks" data-id="{{user.username}}">
+        <div v-show="loading" class="container">
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
         </div>
-        <div v-cloak id="top-tracks" data-id="{{user.username}}">
-            <div class="time-banner">
-                <span>
-                    Top Tracks for Last 
-                </span>
-                <input type="text" id="#days" v-model="days" v-on:keypress="checkSubmit" class="time-input">
-                <span>Days</span>
-            </div>
-            <div class="data-output">
-                <div v-for="track in tracks">
-                    <div class="data-instance">
-                        <p>
-                            <span class ="track-name">[[track.track.name]]</span> by <span class="artist-name">[[track.track.artist.name]]</span> Played: [[track.playcount]]
-                        </p>
-                    </div>
-        
+        <div class="time-banner">
+            <span>
+                Top Tracks for Last 
+            </span>
+            <input type="text" id="#days" v-model="days" v-on:keypress="checkSubmit" class="time-input">
+            <span>Days</span>
+        </div>
+        <div class="data-output">
+            <div v-for="track in tracks">
+                <div class="data-instance">
+                    <p>
+                        <span class ="track-name">[[track.track.name]]</span> by <span class="artist-name">[[track.track.artist.name]]</span> Played [[track.playcount]]
+                    </p>
                 </div>
+                
             </div>
         </div>
         
     </div>
+    <div id="top-tags" class=>
+        <div class="time-banner">
+            Top Tags
+        </div>
+        <div v-show="loading" class="container">
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+        </div>
+        <div v-for="tag in tags">
+            <p>
+                <span class="tag-name"> [[tag.tag.name]]</span> played [[tag.playcount]]
+            </p>
+        </div>
+        
+    </div>
+</div>
 </div>
 {% endblock content %}
 
 {% block scripts %}
-<script src="{% static 'js/user_top_tracks.js' %}"></script>
+<script src="{% static 'js/user_detail.js' %}"></script>
+
 {% endblock scripts %}

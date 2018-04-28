@@ -41,4 +41,10 @@ urlpatterns = [
 
     path('global/top_plays', views.get_global_top_plays, name="global_top_plays"),
     path('global/common_plays', views.get_global_most_common_tracks, name='global_common_tracks'),
+    path('global', views.global_detail, name="global_detail"),
+
+    path('test_get_artist_tag/<int:pk>', views.test_get_artist_tag, name="test"),
+    
+
 ]   
+

@@ -19,7 +19,7 @@ from rest_framework.decorators import api_view
 
 from .forms import GroupForm
 from .models import Album, Artist, Group, Tag, Track, User, UserTrackHistory
-from .serializers import GroupSerializer, TrackSerializer, UserSerializer, UserTrackHistorySerializer
+from .serializers import GroupSerializer, TrackSerializer, UserSerializer, UserTrackHistorySerializer, TagSerializer
 
 #TODO view for user-read-currently-playing
 #TODO integrate spotify api to get spotify url for song
@@ -39,19 +39,21 @@ def get_global_top_plays(request):
   history = UserTrackHistory.objects.filter(played_on__gte=start)
   history = history.values_list('track', flat=True)
   counts = Counter(history)
-  top_tracks = counts.most_common(10)
-  top_tracks = [Track.objects.get(id=track_id) for track_id, play_count in top_tracks] 
-  tracks = TrackSerializer(top_tracks, many=True)
-  return Response(tracks.data)
+  top_20 = counts.most_common(20)
+  top_20 = [(Track.objects.get(id=track_id), playcount) for track_id, playcount in top_20]
+  top_20 = [{'track':TrackSerializer(track).data, 'playcount': playcount} for track, playcount in top_20]
+  return Response(top_20)
   
-
+@api_view(['GET'])
 def get_global_most_common_tracks(request):
+  for user in User.objects.all():
+    user_recent_track_history(user)
   days = int(request.GET.get('days', 30))
   start = timezone.now() - timedelta(days=days)  
-  group = Users.objects.all()
+  group = User.objects.all()
   start = timezone.now() - timedelta(days=days)
   users = [Q(user=user) for user in group]
-  for user in group.users.all():
+  for user in group:
     user_recent_track_history(user)
   history = UserTrackHistory.objects.filter(reduce(operator.or_, users), played_on__gte =start).order_by('-played_on')
   history = set(history.values_list('track', 'user'))
@@ -62,8 +64,8 @@ def get_global_most_common_tracks(request):
   tracks = TrackSerializer(top_tracks, many=True)
   return Response(tracks.data)
 
-
-
+def global_detail(request):
+  return render(request, 'info/global_stats.html')
 
 
 #GROUP DISPLAY VIEWS
@@ -281,15 +283,37 @@ def find_similar_user(request, username):
 def get_artist_tag(artist):
   response = requests.get(build_lastfm_api_call(method='artist.getInfo', artist=artist.name))
   response.raise_for_status()
-  artist, _ = Artist.objects.get_or_create(name=artist.name)
+  artist_tags = artist.tag.all()
   data = response.json()
-
   if data.get('artist'):
     tags = data['artist']['tags']['tag']
     for _tag in tags:
       tag, _ = Tag.objects.get_or_create(name=_tag['name'], wiki_url=_tag['url'])
-      if Artist.objects.filter(tag=tag).exists():
+      print(tag)
+      if tag not in artist_tags:
         artist.tag.add(tag)
+   
+
+def test_get_artist_tag(request, pk):
+  artist = get_object_or_404(Artist, pk=pk)
+  print(artist)
+  response = requests.get(build_lastfm_api_call(method='artist.getInfo', artist=artist.name))
+  response.raise_for_status()
+  artist_tags = artist.tag.all()
+  data = response.json()
+  if data.get('artist'):
+    tags = data['artist']['tags']['tag']
+    for _tag in tags:
+      tag, _ = Tag.objects.get_or_create(name=_tag['name'], wiki_url=_tag['url'])
+      print(tag)
+      if tag not in artist_tags:
+        artist.tag.add(tag)
+  
+
+
+
+
+
 
 def tag_info(request):
   response = requests.get(build_lastfm_api_call(tag=request.tag, method='tag.getInfo'))
@@ -303,9 +327,12 @@ def get_user_top_tags(request, username):
   start = timezone.now() - timedelta(days=days)
   user = get_object_or_404(User, username=username)
   history = UserTrackHistory.objects.filter(user=user, played_on__gte=start)
-  tags = [listen.track.artist.tag.all() for listen in history]
-  tags = [tag for tag in tags]
-  import pdb; pdb.set_trace()
-
-
-
+  tags_querylist = [listen.track.artist.tag.all() for listen in history]
+  tags = []
+  for tagset in tags_querylist:
+    for tag in tagset:
+      tags.append(tag)
+  tags = Counter(tags)
+  top_20 = tags.most_common(20)
+  top_20 = [{'tag':TagSerializer(tag).data, 'playcount': playcount} for tag, playcount in top_20]
+  return Response(top_20)

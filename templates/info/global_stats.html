@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block content %}
+<div class="detail_content">
+    <div v-cloak id="top-tracks" data-id="{{user.username}}">
+        <div class="header">
+            <h1>
+                GLOBAL STATS
+            </h1>
+        </div>
+        <div v-if="trackView">
+            <h3>Top Common Tracks</h3>
+        </div>
+        <div v-if="!trackView">
+            <h3>Top Played Tracks</h3>
+        </div>
+        <div class="time-banner">
+            <span>
+                Top Tracks for Last 
+            </span>
+            <input type="text" id="#days" v-model="days" v-on:keypress="checkSubmit" class="time-input">
+            <span>Days</span>
+        </div>
+        
+        <button v-on:click="trackView = !trackView">
+            Switch
+        </button>
+        
+        <div class="data-output" v-if="trackView">
+            <div v-for="track in topCommonTracks">
+                <div class="data-instance">
+                    <p>
+                        <span class="track-name">[[track.name]]</span> by <span class="artist-name">[[track.artist.name]]</span>
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="data-output" v-if="!trackView">
+            <div v-for="track in topPlayedTracks">
+                <div class="data-instance">
+                    <p>
+                        <span class ="track-name">[[track.track.name]]</span> by <span class="artist-name">[[track.track.artist.name]]</span> Played: [[track.playcount]]
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/global_stats.js' %}"></script>
+{% endblock scripts %}
