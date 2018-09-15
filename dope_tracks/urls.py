@@ -44,6 +44,8 @@ urlpatterns = [
     path('global', views.global_detail, name="global_detail"),
 
     path('test_get_artist_tag/<int:pk>', views.test_get_artist_tag, name="test"),
+
+    path('spotify_callback', views.spotify_callback, name="spotify_callback"),
     
 
 ]   

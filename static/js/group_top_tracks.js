@@ -4,6 +4,7 @@ new Vue({
     data: {
         tracks: [],
         days: 30,
+        api: new SpotifyAPI(),
     },
     methods: {
         getTopTracks: function(){
@@ -12,7 +13,7 @@ new Vue({
             $.get('/group/'+ id +'/common_tracks?days=' + self.days)
             .done(function(tracks){
                 var calls = tracks.map(function(track) {
-                    return $.get('/track/get_recent_users/' + track.id + '?group=' + id)
+                    return $.get('/track/get_recent_users/' + track.id + '?group=' + id + '&days=' + self.days)
                 })
                 $.when.apply(this, calls).done(function() {
                     for(var i = 0; i < arguments.length; i++) {
@@ -27,12 +28,16 @@ new Vue({
             if (event.code === 'Enter'){
                 this.getTopTracks()
             }
+        },
+        spotifyLogin: function(event) {
+            this.api.Login.openLogin()
         }
 
     },
     created: function(){
         this.getTopTracks()
-
+        this.api.Login.setClientId('2b1ace58b3a24aba9f956834462c3aeb');
+        this.api.Login.setRedirect('http://localhost:8000/spotify_callback');
     }
     
 

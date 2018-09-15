@@ -5,9 +5,8 @@ new Vue({
         topCommonTracks: [],
         topPlayedTracks:[],
         days: 30,
-        trackView: true,
     },
-    methods: {
+    methods: {  
         getTopCommonTracks: function(){
             var id = $('#top-tracks').attr('data-id')
             var self = this

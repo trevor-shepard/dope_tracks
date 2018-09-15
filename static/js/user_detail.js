@@ -8,7 +8,7 @@ new Vue({
     },
     methods: {
         getTopTracks: function(){
-            this.loasing=true;
+            this.loading=true;
             var id = $('#top-tracks').attr('data-id')
             var self = this
             $.get('/user/top_tracks/' + id + '?days=' + self.days)

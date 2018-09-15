@@ -48,13 +48,16 @@ def get_global_top_plays(request):
 def get_global_most_common_tracks(request):
   for user in User.objects.all():
     user_recent_track_history(user)
+  
   days = int(request.GET.get('days', 30))
   start = timezone.now() - timedelta(days=days)  
+  
   group = User.objects.all()
-  start = timezone.now() - timedelta(days=days)
   users = [Q(user=user) for user in group]
+  
   for user in group:
     user_recent_track_history(user)
+  
   history = UserTrackHistory.objects.filter(reduce(operator.or_, users), played_on__gte =start).order_by('-played_on')
   history = set(history.values_list('track', 'user'))
   counts = Counter(map(lambda x: x[0], history))
@@ -111,7 +114,7 @@ def group_create(request):
 
 #LASTFM API CALL VIEWS
 def user_all_track_history(request):
-  request.user = User.objects.get(username='narks28')
+  request.user = User.objects.get(username='trevorbshepard')
   _from = timezone.now() - timedelta(days=90)
   response = requests.get(build_lastfm_api_call(user=request.user, method='user.getRecentTracks', _from=_from))
   response.raise_for_status()
@@ -119,14 +122,14 @@ def user_all_track_history(request):
   pull_tracks_and_artists(request.user, initial_data['recenttracks']['track'])
   page = 1
 
-  while page <= int(initial_data['recenttracks']['@attr']['totalPages']):
-    print(page)
-    response = requests.get(build_lastfm_api_call(user=request.user, method='user.getRecentTracks', page=page))
-    response.raise_for_status()
-    data = response.json()
-    pull_tracks_and_artists(request.user, data['recenttracks']['track'])
-    page += 1
-  request.user.last_track_pull = timezone.now()
+  # while page <= int(initial_data['recenttracks']['@attr']['totalPages']):
+  #   print(page)
+  #   response = requests.get(build_lastfm_api_call(user=request.user, method='user.getRecentTracks', page=page))
+  #   response.raise_for_status()
+  #   data = response.json()
+  #   pull_tracks_and_artists(request.user, data['recenttracks']['track'])
+  #   page += 1
+  # request.user.last_track_pull = timezone.now()
   return JsonResponse({'page_count':page, 'inital_data': initial_data})
   
 @transaction.atomic
@@ -145,6 +148,7 @@ def user_recent_track_history(user):
     data = response.json()
     pull_tracks_and_artists(user, data['recenttracks']['track'])
     page += 1
+    print(page)
   user.last_track_pull = timezone.now()
   user.save() 
 
@@ -236,6 +240,7 @@ def display_user_top_tracks(request, username):
   days = int(request.GET.get('days', 30))
   start = timezone.now() - timedelta(days=days)  
   user = get_object_or_404(User, username=username)
+  user_recent_track_history(user)
   history = UserTrackHistory.objects.filter(user=user, played_on__gte =start).order_by('-played_on')
   history = history.values_list('track', flat=True)
   count = Counter(history)
@@ -273,7 +278,8 @@ def find_similar_user(request, username):
   users_history = [UserTrackHistory.objects.filter(user=user, played_on__gte=start) for user in users]
   import pdb; pdb.set_trace()
 
-
+def spotify_callback(request):
+  import pdb; pdb.set_trace()
 
 
 
@@ -308,12 +314,6 @@ def test_get_artist_tag(request, pk):
       print(tag)
       if tag not in artist_tags:
         artist.tag.add(tag)
-  
-
-
-
-
-
 
 def tag_info(request):
   response = requests.get(build_lastfm_api_call(tag=request.tag, method='tag.getInfo'))

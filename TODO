@@ -1,0 +1,11 @@
+spotify api token integration:
+    ☐ login redirects to:
+    ☐ Create Playlist Page
+        ☐ look for group to make a playlist of
+            ☐ look up each song in list
+                ☐ get spotify ID of each song
+            ☐ Create playlists
+        
+
+
+☐ user profile hide artists or track

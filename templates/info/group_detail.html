@@ -9,6 +9,9 @@
     </span>
     {% endfor %}
     <div v-cloak id="top-tracks" data-id="{{group.id}}">
+        <div>
+            <button v-on:click="spotifyLogin()"></button>
+        </div>
         <div class="time-banner">
             <span>
                 Top Tracks for Last 
@@ -26,7 +29,6 @@
                         </span>
                     </div> 
                 </p>
-                
             </div>
         </div>
     </div>
@@ -35,5 +37,6 @@
 {% endblock content %}
 
 {% block scripts %}
+<script src="{% static 'js/api.js' %}"></script>
 <script src="{% static 'js/group_top_tracks.js' %}"></script>
 {% endblock scripts %}
