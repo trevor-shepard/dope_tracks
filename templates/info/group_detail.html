@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block content %}
+<div class='detail_content'>
+    <h2>{{group.name}}: {{group.summary}}</h2>
+    {% for member in members %}
+    <span>
+        {{member.username}}
+    </span>
+    {% endfor %}
+    <div v-cloak id="top-tracks" data-id="{{group.id}}">
+        <div>
+            <button v-on:click="spotifyLogin()"></button>
+        </div>
+        <div class="time-banner">
+            <span>
+                Top Tracks for Last 
+            </span>
+            <input type="text" id="#days" v-model="days" v-on:keypress="checkSubmit" class="time-input">
+            <span>Days</span>
+        </div>
+        <div class="data-output">
+            <div class="data-row " v-for="track in tracks">
+                <p class="data-instance">
+                    <span class="artist-name">[[track.name]]</span> | <span class="track-name">[[track.artist.name]]</span>
+                    <div class="user-list">
+                        <span v-for="user in track.users">
+                            | [[ user.username ]] |
+                        </span>
+                    </div> 
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/group_top_tracks.js' %}"></script>
+{% endblock scripts %}

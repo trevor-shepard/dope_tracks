@@ -18,36 +18,36 @@ class Tag(models.Model):
 
 class Artist(models.Model):
     name = models.CharField(max_length=40)
-    gag = models.ManyToManyField(
+    tag = models.ManyToManyField(
         Tag,
         related_name='tags',
         related_query_name='tags')
-    popularity = models.IntegerField(blank=True, null=True)
-    followers = models.IntegerField(blank=True, null=True)
     mbid = models.CharField(
         max_length=30,
         primary_key=True,
-        editable=False)   
+        editable=False)
+    def __str__(self):
+        return f"{self.name}"
 
 class Album(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)    
-    external_url = models.CharField(max_length=70, blank=True, null=True)
-    url = models.CharField(max_length=50)
     mbid = models.CharField(
         max_length=30,
         primary_key=True,
         editable=False)    
+    def __str__(self):
+        return f"{self.name}"
     
 class Track(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)
-    external_url = models.CharField(max_length=70, blank=True, null=True)
-    popularity = models.IntegerField(blank=True, null=True)
-    url = models.CharField(max_length=50)
     artist = models.ManyToManyField(Artist)
     mbid = models.CharField(
         max_length=30,
         primary_key=True,
-        editable=False)    
+        editable=False)
+    
+    def __str__(self):
+        return f"{self.name}"
     
 #TODO pull listening history after last time pulled
 #TODO
@@ -65,4 +65,7 @@ class UserTrackHistory(models.Model):
         on_delete=models.CASCADE
     )
     played_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} listening to {self.track.name}"
     

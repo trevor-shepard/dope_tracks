@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="detail_content">
+    <div id="username" class="header">
+        <h1>{{request.user.username}}</h1>
+        <h3>All Groups</h3>
+    </div>
+    <div v-cloak id="group-list" data-id="{{user.username}}">
+        <div class="data-output">
+            <div v-for="group in groups" class="data-row">
+                <div class="data-instance">
+                    <a v-bind:href="'/group/'+ group.id">[[group.name]]</a>
+                    
+                    <span class="users-list" v-for="user in group.users">
+                        | [[user.username]] |
+                    </span>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+</div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/user_group_list.js' %}"></script>
+
+
+{% endblock scripts %}

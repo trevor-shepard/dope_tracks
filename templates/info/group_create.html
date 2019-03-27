@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<h1>Create a Group</h1>
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button>Create Group</button>
+    </form>
+</div>
+{% endif %}
+{% endblock content %}
