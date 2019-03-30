@@ -1,0 +1,34 @@
+{
+  "name": "dope_tracks",
+  "version": "1.0.0",
+  "description": "## Files of interest: * `spotify_test/settings.py`   * This is where most of the configation has occured, copy this if need be.   * All `TODO: *` blocks are places where the initial configuration has been altered! Search for them with your favorite text editors. * `spotify_test/urls.py`   * Where we create our OAuth callback urls and some test routes. * `core/decorators.py`   * The `@spotify_view` decorator is defined here which refreshes an instance of an OAuth token and passes it to the view.   * It also checks if the user is authenticated! * `info/views.py`   * 2 Views to display how it works.   * Super simple!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode=development --watch",
+    "build": "webpack -mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yourcelium/dope_tracks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yourcelium/dope_tracks/issues"
+  },
+  "homepage": "https://github.com/Yourcelium/dope_tracks#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  }
+}
