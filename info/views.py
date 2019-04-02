@@ -2,7 +2,7 @@ import requests
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone, dateformat
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 
 
@@ -19,18 +19,37 @@ from .models import Track, Album, UserTrackHistory, Tag, Artist
 # refrence for structure of getrecenttracks
 # {
 # "artist": {
-#   "mbid": "e2cf5b7b-63fa-4975-8b2d-bcefcd698ceb",
-#   "#text": "Rodriguez Jr."
+# "mbid": "456375db-a43f-49e0-82c6-fc7075cb1a20",
+# "#text": "Super Flu"
 # },
-# "album": {},
-# "image": [],
-# "streamable": "0",
-# "date": {},
-# "url": "https://www.last.fm/music/Rodriguez+Jr./_/Ellipsism",
-# "name": "Ellipsism",
-# "mbid": "e602b208-2312-4801-b346-348858673a17"
+# "album": {
+# "mbid": "",
+# "#text": "Super Flu <3 Isaac"
+# },
+# "image": [
+# {
+# "size": "small",
+# "#text": ""
+# },
+# {},
+# {
+# "size": "large",
+# "#text": ""
+# },
+# {
+# "size": "extralarge",
+# "#text": ""
 # }
-
+# ],
+# "streamable": "0",
+# "date": {
+# "uts": "1522984119",
+# "#text": "06 Apr 2018, 03:08"
+# },
+# "url": "https://www.last.fm/music/Super+Flu/_/Super+Flu+%3C3+Isaac",
+# "name": "Super Flu <3 Isaac",
+# "mbid": "e494c10e-1520-3973-9f80-5a807eacd6f6"
+# },
 # Stupid simple view to render login.
 
 # Render Methods
@@ -46,11 +65,19 @@ def stats(request):
   user = get_object_or_404(User, pk=request.user.pk)
 
   if request.method == "GET":
-    days = request.GET['start']
-    
+    days = int(request.GET['days'])
+    from_date = start = timezone.now() - timedelta(days=days)
 
-    history = UserTrackHistory.objects.filter(user=user).filter(played_on__gte=start)
+    history = UserTrackHistory.objects.filter(user=user).filter(played_on__gte=from_date)
 
+    listens = {}
+
+    for listen in history:
+      if listen.track in listens:
+        listens[listen.track] =+ 1
+      else:
+        listens[listen.track] = 0
+        
     import pdb; pdb.set_trace()
 
 
@@ -124,6 +151,16 @@ def record_user_history(user, tracks_data):
       user= user,
       track= track
     )
+
+    # record date played
+    if track_data['date']['#text'] != '':
+      date = track_data['date']['#text']
+      date = datetime.strptime(date, '%d %b %Y, %H:%M')
+      date = timezone.make_aware(date)
+      event.played_on = date
+    else:
+      event.played_on = datetime.now()
+
     event.save()
     print(f"{user.username} listening to {track.name} saved")
   

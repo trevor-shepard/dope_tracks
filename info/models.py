@@ -64,7 +64,7 @@ class UserTrackHistory(models.Model):
         related_query_name='user_track_history',
         on_delete=models.CASCADE
     )
-    played_on = models.DateTimeField(auto_now_add=True)
+    played_on = models.DateTimeField()
 
     def __str__(self):
         return f"{self.user.username} listening to {self.track.name}"
