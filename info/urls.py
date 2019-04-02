@@ -6,6 +6,6 @@ from . import views
 app_name = 'info'
 
 urlpatterns = [
-    path('test', views.test, name='test'),
-    path('all_history', views.request_all_history, name="request_all_history")
+    path('history', views.history, name="history"),
+    path('stats', views.stats, name="stats")
 ]
